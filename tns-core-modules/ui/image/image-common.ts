@@ -6,7 +6,7 @@ import definition = require("ui/image");
 import enums = require("ui/enums");
 import platform = require("platform");
 import utils = require("utils/utils");
-
+import color = require("color");
 import * as types from "utils/types";
 
 var SRC = "src";
@@ -52,6 +52,14 @@ export class Image extends view.View implements definition.Image {
     }
     set imageSource(value: imageSource.ImageSource) {
         this._setValue(Image.imageSourceProperty, value);
+    }
+
+    get tintColor(): color.Color {
+        return null;
+    }
+
+    set tintColor(value: color.Color) {
+        // set tint color here
     }
 
     get src(): any {

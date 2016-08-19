@@ -5,6 +5,7 @@ declare module "ui/image" {
     import dependencyObservable = require("ui/core/dependency-observable");
     import imageSource = require("image-source");
     import view = require("ui/core/view");
+    import color = require("color");
 
     /**
      * Represents a class that provides functionality for loading and streching image(s).
@@ -51,5 +52,10 @@ declare module "ui/image" {
          * - **async** - will try to load in the background, may appear with short delay, good for large images.
          */
         loadMode: string; // "sync" | "async";
+
+        /**
+         * Gets or sets a color that is used to tint the image pixels using a single color.
+         */
+        tintColor: color.Color;
     }
 }

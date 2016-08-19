@@ -6,6 +6,7 @@ import style = require("ui/styling/style");
 import view = require("ui/core/view");
 import background = require("ui/styling/background");
 import utils = require("utils/utils");
+import color = require("color");
 
 global.moduleMerge(imageCommon, exports);
 
@@ -56,9 +57,19 @@ function onImageSourcePropertyChanged(data: dependencyObservable.PropertyChangeD
 
 export class Image extends imageCommon.Image {
     private _android: org.nativescript.widgets.ImageView;
+    private _tintColor: color.Color = null;
 
     get android(): org.nativescript.widgets.ImageView {
         return this._android;
+    }
+
+    get tintColor(): color.Color {
+        return this._tintColor;
+    }
+
+    set tintColor(value: color.Color) {
+        this._tintColor = value;
+        this._android.setColorFilter(value.android);
     }
 
     public _createUI() {

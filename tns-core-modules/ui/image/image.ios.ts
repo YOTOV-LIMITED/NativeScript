@@ -2,6 +2,8 @@ import imageCommon = require("./image-common");
 import dependencyObservable = require("ui/core/dependency-observable");
 import proxy = require("ui/core/proxy");
 import enums = require("ui/enums");
+import color = require("color");
+import utilsModule = require("utils/utils");
 import * as trace from "trace";
 import * as utils from "utils/utils";
 
@@ -39,7 +41,8 @@ function onImageSourcePropertyChanged(data: dependencyObservable.PropertyChangeD
 export class Image extends imageCommon.Image {
     private _ios: UIImageView;
     private _imageSourceAffectsLayout: boolean = true;
-
+    private _templateImageWasCreated: boolean = false;
+    
     constructor() {
         super();
 
@@ -54,7 +57,28 @@ export class Image extends imageCommon.Image {
         return this._ios;
     }
 
+    get tintColor(): color.Color {
+        if (this._ios.tintColor) {
+            return utilsModule.ios.getColor(this._ios.tintColor);
+        }
+        return null;
+    }
+
+    set tintColor(value: color.Color) {
+        if (value !== null && this._ios.image && !this._templateImageWasCreated) {
+            this._ios.image = this._ios.image.imageWithRenderingMode(UIImageRenderingMode.UIImageRenderingModeAlwaysTemplate);
+            this._templateImageWasCreated = true;
+        }
+        this._ios.tintColor = value.ios;
+    }
+
     public _setNativeImage(nativeImage: any) {
+        if (this._ios.tintColor && nativeImage) {
+            nativeImage = nativeImage.imageWithRenderingMode(UIImageRenderingMode.UIImageRenderingModeAlwaysTemplate);
+            this._templateImageWasCreated = true;
+        } else {
+            this._templateImageWasCreated = false;
+        }
         this.ios.image = nativeImage;
 
         if (this._imageSourceAffectsLayout) {
